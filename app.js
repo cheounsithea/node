@@ -15,22 +15,38 @@ app.use(express.json());
 // });
 
 
-app.post("/", async function(req, res) { 
-    console.log(req.body);
-    const fs = require('fs');
-    content = JSON.stringify(req.body);
+app.post("/", async function (req, res) {
+  console.log(req.body);
+  const fs = require('fs');
+  content = JSON.stringify(req.body);
 
-    fs.writeFile('test.txt', content, err => {
+  fs.writeFile('test.txt', content, err => {
     if (err) {
-        console.error(err);
-        return;
+      console.error(err);
+      return;
     }
     console.log('File saved!');
-    });
-    res.send({
-        'message': "Success"
-    });
   });
+  res.send({
+    'message': "Success"
+  });
+});
+
+const fs = require('fs').promises;
+
+app.post("/getData", async function (req, res) {
+  try {
+    // Read the contents of 'test.txt' asynchronously
+    const data = await fs.readFile('test.txt', 'utf8');
+    res.send({
+      'data': data
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error reading the file');
+  }
+});
+
 
 // server.listen(3000, "127.0.0.1",() => console.log(`app listening on port http://127.0.0.1!`));
 
