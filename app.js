@@ -51,14 +51,14 @@ app.post("/getData", async function (req, res) {
 // server.listen(3000, "127.0.0.1",() => console.log(`app listening on port http://127.0.0.1!`));
 
 // io.listen(3000);
-server.listen(3000, "127.0.0.1", () => console.log(`Server listening on http://127.0.0.1:3000`));
+server.listen(3000, "0.0.0.0", () => console.log(`Server listening on http://127.0.0.1:3000`));
 
 server.on('error', (e) => {
   if (e.code === 'EADDRINUSE') {
     console.log('Address in use, retrying...');
     setTimeout(() => {
       server.close();
-      server.listen(3000, "127.0.0.1");
+      server.listen(3000, "0.0.0.0");
     }, 1000);
   } else {
     console.error(e);
