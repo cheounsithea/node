@@ -1,23 +1,18 @@
 require('dotenv').config();
-const  { Downloader } = require('ytdl-mp3');
 
 const express = require('express');
-const fs = require('fs');
-const ytdl = require('ytdl-core');
 const app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-const https = require('https'); 
-const path = require('path');
 app.use(express.json());
 
 
-io.sockets.on('connection', (socket) => {
-    console.log('socket success');
-    socket.on('rupp-role-update-event', function (data) {
-        socket.emit(data.event, data.data);
-    });
-});
+// io.sockets.on('connection', (socket) => {
+//     console.log('socket success');
+//     socket.on('rupp-role-update-event', function (data) {
+//         socket.emit(data.event, data.data);
+//     });
+// });
 
 
 app.post("/", async function(req, res) { 
@@ -37,6 +32,19 @@ app.post("/", async function(req, res) {
     });
   });
 
-server.listen(3000, "127.0.0.1",() => console.log(`app listening on port http://127.0.0.1!`));
+// server.listen(3000, "127.0.0.1",() => console.log(`app listening on port http://127.0.0.1!`));
 
-io.listen(3000);
+// io.listen(3000);
+server.listen(3000, "127.0.0.1", () => console.log(`Server listening on http://127.0.0.1:3000`));
+
+server.on('error', (e) => {
+  if (e.code === 'EADDRINUSE') {
+    console.log('Address in use, retrying...');
+    setTimeout(() => {
+      server.close();
+      server.listen(3000, "127.0.0.1");
+    }, 1000);
+  } else {
+    console.error(e);
+  }
+});
